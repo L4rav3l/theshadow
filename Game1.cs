@@ -28,7 +28,6 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
         _sceneManager.AddScene(new Menu(GraphicsDevice, _sceneManager, Content), "menu");
         _sceneManager.ChangeScene("menu");
     }
