@@ -118,7 +118,7 @@ public class Map : IScene
 
         foreach(var layer in _map.Layers)
         {
-            _layerVisible[layer.Name] = true;
+            _layerVisible[layer.Name] = _map.Layers[layer.Name].Visible;
         }
 
         _playerTexture = _content.Load<Texture2D>("player");
@@ -176,7 +176,7 @@ public class Map : IScene
             solidTiles.Add(solid);
         }
 
-        if(state.IsKeyDown(Keys.E) && !GameData.previous.IsKeyDown(Keys.E))
+        if(state.IsKeyDown(Keys.E) && !GameData.previous.IsKeyDown(Keys.E) && _playerControl)
         {
             foreach(Rectangle solid in _yellowCube)
             {
@@ -237,90 +237,127 @@ public class Map : IScene
                 {
                     if(_state1Status)
                     {
-                        if(GameData.Cube1)
+                        if(_inHand == false && _handId == 0)
                         {
-                            _inHand = true;
+                            if(GameData.Cube1)
+                            {
+                                if(GameData.CubeColor[0] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(GameData.CubeColor[0] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(GameData.CubeColor[0] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(GameData.CubeColor[0] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                            } else {
+                                
+                                if(_colorArray[0] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(_colorArray[0] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(_colorArray[0] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(_colorArray[0] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                                _colorArray[0] = Color.White;
+
+                            }
                             
-                            if(GameData.CubeColor[0] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
+                            _layerVisible["State1"] = true;
+                            _layerVisible["State1Red"] = false;
+                            _layerVisible["State1Yellow"] = false;
+                            _layerVisible["State1Green"] = false;
+                            _layerVisible["State1Blue"] = false;
 
-                            if(GameData.CubeColor[0] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(GameData.CubeColor[0] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(GameData.CubeColor[0] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            GameData.Cube1 = false;
-                        } else {
                             _inHand = true;
-
-                            if(_colorArray[0] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
-
-                            if(_colorArray[0] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(_colorArray[0] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(_colorArray[0] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            _colorArray[0] = Color.White;
                             _state1Status = false;
                             GameData.Cube1 = false;
-                        }
-                    } else {
-                    if((GameData.CubeColor[0] == Color.Red && _handId == 1) || (GameData.CubeColor[0] == Color.Green && _handId == 3) || (GameData.CubeColor[0] == Color.Yellow && _handId == 2) || (GameData.CubeColor[0] == Color.Blue && _handId == 4))
-                        {
-                            GameData.Cube1 = true;
-                            _inHand = false;
-                            _handId = 0;
-                            _state1Status = true;
+                            } 
+                        
                         } else {
-                            if(_handId == 1)
+
+                            if((GameData.CubeColor[0] == Color.Red && _handId == 1))
                             {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Red"] = true;
+                                GameData.Cube1 = true;
+                                _state1Status = true;
+                            } else if(_handId == 1)
+                            {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Red"] = true;
                                 _colorArray[0] = Color.Red;
+                                _state1Status = true;
                             }
 
-                            if(_handId == 2)
+                            if((GameData.CubeColor[0] == Color.Yellow && _handId == 2))
                             {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Yellow"] = true;
+                                GameData.Cube1 = true;
+                                _state1Status = true;
+                            } else if(_handId == 2)
+                            {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Yellow"] = true;
                                 _colorArray[0] = Color.Yellow;
+                                _state1Status = true;
                             }
 
-                            if(_handId == 3)
+                            if((GameData.CubeColor[0] == Color.Green && _handId == 3))
                             {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Green"] = true;
+                                GameData.Cube1 = true;
+                                _state1Status = true;
+                            } else if(_handId == 3)
+                            {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Green"] = true;
                                 _colorArray[0] = Color.Green;
+                                _state1Status = true;
                             }
 
-                            if(_handId == 4)
+                            if((GameData.CubeColor[0] == Color.Blue && _handId == 4))
                             {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Blue"] = true;
+                                GameData.Cube1 = true;
+                                _state1Status = true;
+                            } else if(_handId == 4)
+                            {
+                                _layerVisible["State1"] = false;
+                                _layerVisible["State1Blue"] = true;
                                 _colorArray[0] = Color.Blue;
+                                _state1Status = true;
                             }
 
-                            _inHand = false;
                             _handId = 0;
-                            _state1Status = true;
-                        }
+                            _inHand = false;
                     }
                 }
             }
@@ -331,90 +368,127 @@ public class Map : IScene
                 {
                     if(_state2Status)
                     {
-                        if(GameData.Cube2)
+                        if(_inHand == false && _handId == 0)
                         {
-                            _inHand = true;
+                            if(GameData.Cube2)
+                            {
+                                if(GameData.CubeColor[1] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(GameData.CubeColor[1] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(GameData.CubeColor[1] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(GameData.CubeColor[1] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                            } else {
+                                
+                                if(_colorArray[1] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(_colorArray[1] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(_colorArray[1] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(_colorArray[1] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                                _colorArray[1] = Color.White;
+
+                            }
                             
-                            if(GameData.CubeColor[1] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
+                            _layerVisible["State2"] = true;
+                            _layerVisible["State2Red"] = false;
+                            _layerVisible["State2Yellow"] = false;
+                            _layerVisible["State2Green"] = false;
+                            _layerVisible["State2Blue"] = false;
 
-                            if(GameData.CubeColor[1] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(GameData.CubeColor[1] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(GameData.CubeColor[1] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            GameData.Cube2 = false;
-                        } else {
                             _inHand = true;
-
-                            if(_colorArray[1] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
-
-                            if(_colorArray[1] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(_colorArray[1] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(_colorArray[1] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            _colorArray[1] = Color.White;
                             _state2Status = false;
                             GameData.Cube2 = false;
-                        }
-                    } else {
-                    if((GameData.CubeColor[1] == Color.Red && _handId == 1) || (GameData.CubeColor[1] == Color.Green && _handId == 3) || (GameData.CubeColor[1] == Color.Yellow && _handId == 2) || (GameData.CubeColor[1] == Color.Blue && _handId == 4))
-                        {
-                            GameData.Cube2 = true;
-                            _inHand = false;
-                            _handId = 0;
-                            _state2Status = true;
+                            } 
+                        
                         } else {
-                            if(_handId == 1)
+
+                            if((GameData.CubeColor[1] == Color.Red && _handId == 1))
                             {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Red"] = true;
+                                GameData.Cube2 = true;
+                                _state2Status = true;
+                            } else if(_handId == 1)
+                            {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Red"] = true;
                                 _colorArray[1] = Color.Red;
+                                _state2Status = true;
                             }
 
-                            if(_handId == 2)
+                            if((GameData.CubeColor[1] == Color.Yellow && _handId == 2))
                             {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Yellow"] = true;
+                                GameData.Cube2 = true;
+                                _state2Status = true;
+                            } else if(_handId == 2)
+                            {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Yellow"] = true;
                                 _colorArray[1] = Color.Yellow;
+                                _state2Status = true;
                             }
 
-                            if(_handId == 3)
+                            if((GameData.CubeColor[1] == Color.Green && _handId == 3))
                             {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Green"] = true;
+                                GameData.Cube2 = true;
+                                _state2Status = true;
+                            } else if(_handId == 3)
+                            {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Green"] = true;
                                 _colorArray[1] = Color.Green;
+                                _state2Status = true;
                             }
 
-                            if(_handId == 4)
+                            if((GameData.CubeColor[1] == Color.Blue && _handId == 4))
                             {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Blue"] = true;
+                                GameData.Cube2 = true;
+                                _state2Status = true;
+                            } else if(_handId == 4)
+                            {
+                                _layerVisible["State2"] = false;
+                                _layerVisible["State2Blue"] = true;
                                 _colorArray[1] = Color.Blue;
+                                _state2Status = true;
                             }
 
-                            _inHand = false;
                             _handId = 0;
-                            _state2Status = true;
-                        }
+                            _inHand = false;
                     }
                 }
             }
@@ -425,90 +499,127 @@ public class Map : IScene
                 {
                     if(_state3Status)
                     {
-                        if(GameData.Cube3)
+                        if(_inHand == false && _handId == 0)
                         {
-                            _inHand = true;
+                            if(GameData.Cube3)
+                            {
+                                if(GameData.CubeColor[2] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(GameData.CubeColor[2] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(GameData.CubeColor[2] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(GameData.CubeColor[2] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                            } else {
+                                
+                                if(_colorArray[2] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(_colorArray[2] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(_colorArray[2] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(_colorArray[2] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                                _colorArray[2] = Color.White;
+
+                            }
                             
-                            if(GameData.CubeColor[2] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
+                            _layerVisible["State3"] = true;
+                            _layerVisible["State3Red"] = false;
+                            _layerVisible["State3Yellow"] = false;
+                            _layerVisible["State3Green"] = false;
+                            _layerVisible["State3Blue"] = false;
 
-                            if(GameData.CubeColor[2] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(GameData.CubeColor[2] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(GameData.CubeColor[2] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            GameData.Cube3 = false;
-                        } else {
                             _inHand = true;
-
-                            if(_colorArray[2] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
-
-                            if(_colorArray[2] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(_colorArray[2] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(_colorArray[2] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            _colorArray[2] = Color.White;
                             _state3Status = false;
                             GameData.Cube3 = false;
-                        }
-                    } else {
-                    if((GameData.CubeColor[2] == Color.Red && _handId == 1) || (GameData.CubeColor[2] == Color.Green && _handId == 3) || (GameData.CubeColor[2] == Color.Yellow && _handId == 2) || (GameData.CubeColor[2] == Color.Blue && _handId == 4))
-                        {
-                            GameData.Cube3 = true;
-                            _inHand = false;
-                            _handId = 0;
-                            _state3Status = true;
+                            } 
+                        
                         } else {
-                            if(_handId == 1)
+
+                            if((GameData.CubeColor[2] == Color.Red && _handId == 1))
                             {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Red"] = true;
+                                GameData.Cube3 = true;
+                                _state3Status = true;
+                            } else if(_handId == 1)
+                            {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Red"] = true;
                                 _colorArray[2] = Color.Red;
+                                _state3Status = true;
                             }
 
-                            if(_handId == 2)
+                            if((GameData.CubeColor[2] == Color.Yellow && _handId == 2))
                             {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Yellow"] = true;
+                                GameData.Cube3 = true;
+                                _state3Status = true;
+                            } else if(_handId == 2)
+                            {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Yellow"] = true;
                                 _colorArray[2] = Color.Yellow;
+                                _state3Status = true;
                             }
 
-                            if(_handId == 3)
+                            if((GameData.CubeColor[2] == Color.Green && _handId == 3))
                             {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Green"] = true;
+                                GameData.Cube3 = true;
+                                _state3Status = true;
+                            } else if(_handId == 3)
+                            {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Green"] = true;
                                 _colorArray[2] = Color.Green;
+                                _state3Status = true;
                             }
 
-                            if(_handId == 4)
+                            if((GameData.CubeColor[2] == Color.Blue && _handId == 4))
                             {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Blue"] = true;
+                                GameData.Cube3 = true;
+                                _state3Status = true;
+                            } else if(_handId == 4)
+                            {
+                                _layerVisible["State3"] = false;
+                                _layerVisible["State3Blue"] = true;
                                 _colorArray[2] = Color.Blue;
+                                _state3Status = true;
                             }
 
-                            _inHand = false;
                             _handId = 0;
-                            _state3Status = true;
-                        }
+                            _inHand = false;
                     }
                 }
             }
@@ -519,90 +630,127 @@ public class Map : IScene
                 {
                     if(_state4Status)
                     {
-                        if(GameData.Cube4)
+                        if(_inHand == false && _handId == 0)
                         {
-                            _inHand = true;
+                            if(GameData.Cube4)
+                            {
+                                if(GameData.CubeColor[3] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(GameData.CubeColor[3] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(GameData.CubeColor[3] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(GameData.CubeColor[3] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                            } else {
+                                
+                                if(_colorArray[3] == Color.Red)
+                                {
+                                    _handId = 1;
+                                }
+
+                                if(_colorArray[3] == Color.Yellow)
+                                {
+                                    _handId = 2;
+                                }
+
+                                if(_colorArray[3] == Color.Green)
+                                {
+                                    _handId = 3;
+                                }
+
+                                if(_colorArray[3] == Color.Blue)
+                                {
+                                    _handId = 4;
+                                }
+
+                                _colorArray[3] = Color.White;
+
+                            }
                             
-                            if(GameData.CubeColor[3] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
+                            _layerVisible["State4"] = true;
+                            _layerVisible["State4Red"] = false;
+                            _layerVisible["State4Yellow"] = false;
+                            _layerVisible["State4Green"] = false;
+                            _layerVisible["State4Blue"] = false;
 
-                            if(GameData.CubeColor[3] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(GameData.CubeColor[3] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(GameData.CubeColor[3] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            GameData.Cube4 = false;
-                        } else {
                             _inHand = true;
-
-                            if(_colorArray[3] == Color.Red)
-                            {
-                                _handId = 1;
-                            }
-
-                            if(_colorArray[3] == Color.Yellow)
-                            {
-                                _handId = 2;
-                            }
-
-                            if(_colorArray[3] == Color.Green)
-                            {
-                                _handId = 3;
-                            }
-
-                            if(_colorArray[3] == Color.Blue)
-                            {
-                                _handId = 4;
-                            }
-
-                            _colorArray[3] = Color.White;
                             _state4Status = false;
                             GameData.Cube4 = false;
-                        }
-                    } else {
-                    if((GameData.CubeColor[3] == Color.Red && _handId == 1) || (GameData.CubeColor[3] == Color.Green && _handId == 3) || (GameData.CubeColor[3] == Color.Yellow && _handId == 2) || (GameData.CubeColor[3] == Color.Blue && _handId == 4))
-                        {
-                            GameData.Cube4 = true;
-                            _inHand = false;
-                            _handId = 0;
-                            _state4Status = true;
+                            } 
+                        
                         } else {
-                            if(_handId == 1)
+
+                            if((GameData.CubeColor[3] == Color.Red && _handId == 1))
                             {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Red"] = true;
+                                GameData.Cube4 = true;
+                                _state4Status = true;
+                            } else if(_handId == 1)
+                            {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Red"] = true;
                                 _colorArray[3] = Color.Red;
+                                _state4Status = true;
                             }
 
-                            if(_handId == 2)
+                            if((GameData.CubeColor[3] == Color.Yellow && _handId == 2))
                             {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Yellow"] = true;
+                                GameData.Cube4 = true;
+                                _state4Status = true;
+                            } else if(_handId == 2)
+                            {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Yellow"] = true;
                                 _colorArray[3] = Color.Yellow;
+                                _state4Status = true;
                             }
 
-                            if(_handId == 3)
+                            if((GameData.CubeColor[3] == Color.Green && _handId == 3))
                             {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Green"] = true;
+                                GameData.Cube4 = true;
+                                _state4Status = true;
+                            } else if(_handId == 3)
+                            {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Green"] = true;
                                 _colorArray[3] = Color.Green;
+                                _state4Status = true;
                             }
 
-                            if(_handId == 4)
+                            if((GameData.CubeColor[3] == Color.Blue && _handId == 4))
                             {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Blue"] = true;
+                                GameData.Cube4 = true;
+                                _state4Status = true;
+                            } else if(_handId == 4)
+                            {
+                                _layerVisible["State4"] = false;
+                                _layerVisible["State4Blue"] = true;
                                 _colorArray[3] = Color.Blue;
+                                _state4Status = true;
                             }
 
-                            _inHand = false;
                             _handId = 0;
-                            _state4Status = true;
-                        }
+                            _inHand = false;
                     }
                 }
             }

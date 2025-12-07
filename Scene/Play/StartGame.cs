@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using System;
+using System.Linq;
 
 namespace TheShadow;
 
@@ -26,36 +27,26 @@ public class StartGame : IScene
         _sceneManager.AddScene(new Map(_graphics, _sceneManager, _content), "map");
         _sceneManager.AddScene(new Control(_graphics, _sceneManager, _content), "control");
 
-        rnd = new Random();
+        Random rnd = new Random();
+
+        Color[] colors = new Color[]
+        {
+            Color.Red,
+            Color.Yellow,
+            Color.Green,
+            Color.Blue
+        };
+
+        colors = colors.OrderBy(x => rnd.Next()).ToArray();
+
+        for(int i = 0; i < 4; i++)
+        {
+            GameData.CubeColor[i] = colors[i];
+        }
     }
 
     public void Update(GameTime gameTime)
     {
-        for(int i = 0; i < 4; i++)
-        {
-            int num = rnd.Next(1, 4);
-
-            if(num == 1)
-            {
-                GameData.CubeColor[i] = Color.Red;
-            }
-
-            if(num == 2)
-            {
-                GameData.CubeColor[i] = Color.Yellow;
-            }
-
-            if(num == 3)
-            {
-                GameData.CubeColor[i] = Color.Green;
-            }
-
-            if(num == 4)
-            {
-                GameData.CubeColor[i] = Color.Blue;
-            }
-        }
-
         _sceneManager.ChangeScene("map");        
     }
 
