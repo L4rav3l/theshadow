@@ -44,6 +44,11 @@ public class Control : IScene
             _sceneManager.ChangeScene("map");
         }
 
+        if(state.IsKeyDown(Keys.Enter) && !GameData.previous.IsKeyDown(Keys.Enter) && GameData.Cube1 && GameData.Cube2 && GameData.Cube3 && GameData.Cube4)
+        {
+            _sceneManager.ChangeScene("end");
+        }
+
         GameData.previous = state;
     }
 
@@ -85,6 +90,14 @@ public class Control : IScene
             spriteBatch.Draw(_x, new Vector2((int)((Width / 5) * 4 - 50), (Height / 2)), null, Color.White, 0f, Vector2.Zero, 10f, SpriteEffects.None, 0.1f);
         } else {
             spriteBatch.Draw(_mark, new Vector2((int)((Width / 5) * 4 - 50), (Height / 2)), null, Color.White, 0f, Vector2.Zero, 10f, SpriteEffects.None, 0.1f);
+        }
+
+        if(GameData.Cube1 && GameData.Cube2 && GameData.Cube3 && GameData.Cube4)
+        {
+            Vector2 shipM = _pixelfont.MeasureString("PRESS ENTER TO SHIP");
+            Vector2 ship = new Vector2((Width / 2) - (shipM.X / 2), ((Height / 4) * 3) - (shipM.Y / 2));
+
+            spriteBatch.DrawString(_pixelfont, "PRESS ENTER TO SHIP", ship, Color.White);
         }
 
     }

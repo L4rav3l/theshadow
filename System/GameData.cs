@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using System;
 
 public static class GameData
 {
@@ -12,4 +13,6 @@ public static class GameData
     public static bool Cube3 {get;set;}
     public static bool Cube4 {get;set;}
     public static Color[] CubeColor = new Color[4];
+    public static DateTime startDate {get;set;}
+    public static DateTime endDate {get;set;}
 }

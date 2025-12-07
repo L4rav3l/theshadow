@@ -61,8 +61,8 @@ public class Map : IScene
 
     private Texture2D _hand;
 
-    private bool _inHand = true;
-    private int _handId = 1;
+    private bool _inHand = false;
+    private int _handId = 0;
 
     private Dictionary<string, bool> _layerVisible = new();
 

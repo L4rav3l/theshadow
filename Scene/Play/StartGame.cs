@@ -15,6 +15,8 @@ public class StartGame : IScene
 
     private Random rnd;
 
+    private bool _first = true;
+
     public StartGame(GraphicsDevice _graphics, SceneManager _sceneManager, ContentManager _content)
     {
         this._graphics = _graphics;
@@ -26,10 +28,11 @@ public class StartGame : IScene
     {
         _sceneManager.AddScene(new Map(_graphics, _sceneManager, _content), "map");
         _sceneManager.AddScene(new Control(_graphics, _sceneManager, _content), "control");
+        _sceneManager.AddScene(new End(_graphics, _sceneManager, _content), "end");
 
-        Random rnd = new Random();
+        rnd = new Random();
 
-        Color[] colors = new Color[]
+        Color[] colors =
         {
             Color.Red,
             Color.Yellow,
@@ -39,7 +42,7 @@ public class StartGame : IScene
 
         colors = colors.OrderBy(x => rnd.Next()).ToArray();
 
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             GameData.CubeColor[i] = colors[i];
         }
@@ -47,7 +50,13 @@ public class StartGame : IScene
 
     public void Update(GameTime gameTime)
     {
-        _sceneManager.ChangeScene("map");        
+        if (_first)
+        {
+            GameData.startDate = DateTime.Now;
+            _first = false;
+
+            _sceneManager.ChangeScene("map");
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
