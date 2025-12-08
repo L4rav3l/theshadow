@@ -27,6 +27,7 @@ public class Menu : IScene
     public void LoadContent()
     {
         _pixelfont = _content.Load<SpriteFont>("pixelfont");
+        _sceneManager.AddScene(new StartGame(_graphics, _sceneManager, _content), "startgame");
     }
 
     public void Update(GameTime gameTime)
@@ -57,7 +58,6 @@ public class Menu : IScene
         {
             if(_selected == 0)
             {
-                _sceneManager.AddScene(new StartGame(_graphics, _sceneManager, _content), "startgame");
                 _sceneManager.ChangeScene("startgame");
             } else {
                 GameData.Exit = true;
